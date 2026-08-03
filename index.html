@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Employee Spotlight</title>
+<style>
+  :root{
+    --ink:#0A0B0D;
+    --panel:#0F141A;
+    --panel-2:#16222B;
+    --stroke:#1E2F3D;
+    --cyan:#00D4FF;
+    --cyan-dim:#00A9C7;
+    --text:#EAF2F5;
+    --muted:#7C93A0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(1200px 500px at 10% -10%, rgba(0,212,255,.10), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(0,169,199,.08), transparent 55%),
+      var(--ink);
+    color:var(--text);
+    padding:20px;
+    min-height:100vh;
+  }
+  .wrap{max-width:1000px;margin:0 auto;}
+
+  /* header */
+  .header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 10px 2px rgba(0,212,255,.7);
+  }
+  .header h1{
+    font-size:13px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin:0;
+    font-weight:700;
+  }
+  .header h1 span{color:var(--cyan);}
+
+  .header-right{display:flex;align-items:center;gap:10px;}
+  .li-follow{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:11px;font-weight:700;letter-spacing:.02em;
+    color:var(--ink);
+    background:var(--cyan);
+    padding:7px 12px;border-radius:20px;
+    text-decoration:none;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .li-follow:hover{background:#7FE9FF;transform:translateY(-1px);}
+
+  .toggle{display:flex;gap:6px;}
+  .toggle button{
+    font-size:11px;font-weight:700;letter-spacing:.02em;
+    border:1px solid var(--stroke);background:var(--panel);color:var(--muted);
+    padding:6px 12px;border-radius:20px;cursor:pointer;
+    transition:all .2s ease;
+  }
+  .toggle button.active{background:var(--cyan);color:var(--ink);border-color:var(--cyan);}
+  .toggle button:hover:not(.active){border-color:var(--cyan-dim);color:var(--text);}
+
+  /* grid */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:16px;
+  }
+  .card{
+    background:linear-gradient(160deg, var(--panel) 0%, var(--panel-2) 100%);
+    border:1px solid var(--stroke);
+    border-radius:14px;
+    overflow:hidden;
+    position:relative;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(0,212,255,.45);
+    box-shadow:0 14px 34px -14px rgba(0,212,255,.4);
+  }
+  .new-tag{
+    position:absolute;top:10px;right:10px;z-index:3;
+    font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+    background:var(--cyan);color:var(--ink);padding:3px 8px;border-radius:20px;
+    box-shadow:0 0 10px rgba(0,212,255,.5);
+  }
+
+  /* film strip photo */
+  .filmstrip{
+    background:var(--ink);
+    padding:8px 10px 6px;
+    position:relative;
+  }
+  .sprockets{
+    height:8px;
+    background-image:radial-gradient(circle, var(--panel-2) 42%, transparent 43%);
+    background-size:14px 8px;
+    background-position:2px center;
+    background-repeat:repeat-x;
+    opacity:.9;
+  }
+  .frame{
+    position:relative;
+    margin:6px 0;
+    border:1px solid var(--stroke);
+    background:#000;
+  }
+  .frame img{
+    display:block;
+    width:100%;
+    aspect-ratio:4/5;
+    object-fit:cover;
+    filter:grayscale(12%) contrast(1.08) saturate(1.05);
+    transition:filter .3s ease, transform .4s ease;
+  }
+  .card:hover .frame img{
+    filter:grayscale(0%) contrast(1.05) saturate(1.1);
+    transform:scale(1.03);
+  }
+  .frame::after{
+    content:"";
+    position:absolute;inset:0;
+    box-shadow:inset 0 0 0 1px rgba(0,212,255,.15);
+    pointer-events:none;
+  }
+  .frame-no{
+    position:absolute;bottom:6px;left:6px;
+    font-size:9px;font-family:'Courier New',monospace;letter-spacing:.05em;
+    color:var(--cyan-dim);
+    background:rgba(10,11,13,.65);
+    padding:2px 5px;border-radius:3px;
+    z-index:2;
+  }
+
+  /* body */
+  .card-body{padding:14px 16px 16px;text-align:center;}
+  .name{font-size:15px;font-weight:700;color:var(--text);letter-spacing:.01em;}
+  .role{font-size:12px;color:var(--cyan-dim);font-weight:600;margin-top:3px;}
+  .team{font-size:10.5px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.05em;}
+  .funfact{
+    font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5;font-style:italic;
+    border-top:1px solid var(--stroke);padding-top:10px;
+  }
+  .li-post{
+    display:inline-flex;align-items:center;gap:5px;
+    margin-top:12px;
+    font-size:11px;font-weight:700;letter-spacing:.02em;
+    color:var(--cyan);text-decoration:none;
+  }
+  .li-post:hover{color:#7FE9FF;}
+  .li-post svg{width:12px;height:12px;fill:currentColor;}
+
+  .empty{font-size:13px;color:var(--muted);grid-column:1/-1;text-align:center;padding:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <h1>SYTEX <span>·</span> Employee Spotlight</h1>
+    </div>
+    <div class="header-right">
+      <div class="toggle">
+        <button id="btnAll" class="active">All</button>
+        <button id="btnNew">New Hires</button>
+      </div>
+      <a class="li-follow" id="liFollow" href="#" target="_blank" rel="noopener">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        Follow on LinkedIn
+      </a>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+  const DATA_URL = "data.json";
+  let people = [];
+  let filter = "all";
+
+  function frameNumber(i){
+    return "FRM·" + String(i + 1).padStart(2, "0");
+  }
+
+  function render(){
+    const grid = document.getElementById("grid");
+    const list = filter === "new" ? people.filter(p => p.isNewHire) : people;
+    if(list.length === 0){
+      grid.innerHTML = `<div class="empty">No new hires to show right now — check back soon.</div>`;
+      return;
+    }
+    grid.innerHTML = list.map((p, i) => `
+      <div class="card">
+        ${p.isNewHire ? '<div class="new-tag">New</div>' : ""}
+        <div class="filmstrip">
+          <div class="sprockets"></div>
+          <div class="frame">
+            <img src="${p.photo}" alt="${p.name}" />
+            <div class="frame-no">${frameNumber(i)}</div>
+          </div>
+          <div class="sprockets"></div>
+        </div>
+        <div class="card-body">
+          <div class="name">${p.name}</div>
+          <div class="role">${p.role}</div>
+          <div class="team">${p.team}</div>
+          <div class="funfact">"${p.funFact}"</div>
+          ${p.linkedinPost ? `
+            <a class="li-post" href="${p.linkedinPost}" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+              View announcement
+            </a>` : ""}
+        </div>
+      </div>
+    `).join("");
+  }
+
+  document.getElementById("btnAll").addEventListener("click", () => {
+    filter = "all";
+    document.getElementById("btnAll").classList.add("active");
+    document.getElementById("btnNew").classList.remove("active");
+    render();
+  });
+  document.getElementById("btnNew").addEventListener("click", () => {
+    filter = "new";
+    document.getElementById("btnNew").classList.add("active");
+    document.getElementById("btnAll").classList.remove("active");
+    render();
+  });
+
+  fetch(DATA_URL)
+    .then(r => r.json())
+    .then(data => {
+      people = data.employees || [];
+      document.getElementById("liFollow").href = data.companyLinkedIn || "#";
+      render();
+    })
+    .catch(() => {
+      document.getElementById("grid").innerHTML = `<div class="empty">Couldn't load employee data.</div>`;
+    });
+</script>
+</body>
+</html>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="color-scheme" content="light dark">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Employee Spotlight</title>
 <style>
@@ -78,7 +79,8 @@
     gap:6px;
   }
   .card{
-    background:linear-gradient(160deg, var(--panel) 0%, var(--panel-2) 100%);
+    background:rgba(15,20,26,0.35);
+    backdrop-filter:blur(6px);
     border:1px solid var(--stroke);
     border-radius:14px;
     overflow:hidden;
@@ -99,7 +101,7 @@
 
   /* film strip photo */
   .filmstrip{
-    background:var(--ink);
+    background:transparent;
     padding:4px 5px 3px;
     position:relative;
   }
@@ -115,7 +117,7 @@
     position:relative;
     margin:6px 0;
     border:1px solid var(--stroke);
-    background:#000;
+    background:rgba(0,0,0,0.15);
   }
   .frame img{
     display:block;
@@ -209,7 +211,6 @@
           <div class="sprockets"></div>
           <div class="frame">
             <img src="${p.photo}" alt="${p.name}" />
-            <div class="frame-no">${frameNumber(i)}</div>
           </div>
           <div class="sprockets"></div>
         </div>
